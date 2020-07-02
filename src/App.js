@@ -1,26 +1,55 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './styles.css'
+// import TodoItem from "./todoItem";
+import TodoList from "./todoList";
+import { Provider } from 'react-redux'
+// import {createStore} from "redux";
+// import {rootReducer} from "./redux/rootReducer";
+import store from "./redux/store"
+import {ADD_RECORD} from "./redux/actionTypes";
+
+window.store = store;
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+  function addingAction() {
+    let value = document.getElementById('textareaId').value;
+    if(!value) return
+    document.getElementById('textareaId').value = '';
+
+    return {
+      type: ADD_RECORD,
+      id: Date.now(),
+      text: value,
+      completed: false
+    }
+  }
+
+  function addingRecord() {
+    let objRecord = addingAction()
+    if(!objRecord) return;
+    store.dispatch(objRecord)
+
+  }
+
+    return (
+      <div className="App">
+        <div id='todoList'>
+          <div className='header'>
+            <h1>Задачи</h1>
+            <button className='sortingButton'/>
+          </div>
+          <textarea id="textareaId" placeholder="Enter a title for this card..."/>
+          <button id="AddCard" onClick = {() => {addingRecord()}}>Add Card</button>
+          <TodoList/>
+          <div className="buttonsDiv">
+            <button id="nextPage"/>
+            <button id="prevPage"/>
+          </div>
+        </div>
+      </div>
+    );
 }
 
 export default App;
